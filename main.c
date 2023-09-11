@@ -36,6 +36,7 @@ void main(void) {
     display_set_line(0, "hello world                 x ");
     
     while(1){
+        display_sprintf(1, "t= %x", gpsclock_pll_freq());
         display_refresh();
         __delay_ms(20);
     }

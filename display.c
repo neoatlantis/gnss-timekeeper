@@ -10,7 +10,7 @@
 
 #include "common.h"
 
-char display_framebuffer[4][20] = { ' ' };
+#include "display.h"
 
 char UART1_init(const long int baudrate){
     unsigned int x;
