@@ -12,11 +12,12 @@ unsigned long long SYSTEM_CLOCK;
 unsigned long long LAST_1PPS_SYSTEM_CLOCK;
 unsigned long      COUNT_1PPS_RECEIVED;
 
-uint16_t PLL_PRELOAD = 500;
+uint16_t PLL_PRELOAD = 6000;
 uint16_t PLL_LAST_PULSES = 0;
 uint16_t PLL_PULSES  = 0;
-#define PLL_PRELOAD_LOWER_BOUND 550
-#define PLL_PRELOAD_UPPER_BOUND 450
+uint32_t PLL_RESIDUAL = 0;
+#define PLL_PRELOAD_LOWER_BOUND 6050
+#define PLL_PRELOAD_UPPER_BOUND 5950
 #define PLL_DESIRED_PULSES      2000
 
 void gpsclock_init(void){
@@ -35,8 +36,8 @@ void gpsclock_init(void){
     INTCON3bits.INT3IE = 1; // enable interrupt 3
     
     // set up timer 0 for timing the internal clock freq respective to 1pps
-    T0CONbits.T0PS = 0b000; // prescaler = 2
-    T0CONbits.PSA = 0;      // enable prescaler
+    //T0CONbits.T0PS = 0b000; // prescaler = 2
+    T0CONbits.PSA = 1;      // disable prescaler
     T0CONbits.T0CS = 0;     // use internal instruction cycle = Fosc/4
     T0CONbits.T08BIT = 0;   // timer 0 is 16 bit
     T0CONbits.TMR0ON = 0;   // off
@@ -49,18 +50,27 @@ char gpsclock_interrupt(void){
     char pll_reset = 0;
     
     if(INTCON3bits.INT3IF){
+        uint16_t timer_current = TMR0L | (TMR0H << 8);
         T0CONbits.TMR0ON = 0;
+        
+        PLL_RESIDUAL = PLL_PRELOAD - (0xFFFF-timer_current);
+        
         //LAST_1PPS_SYSTEM_CLOCK = SYSTEM_CLOCK;
         //COUNT_1PPS_RECEIVED += 1;
         
         PLL_LAST_PULSES = PLL_PULSES;
         PLL_PULSES = 0;
         
+        
         if (PLL_LAST_PULSES < PLL_DESIRED_PULSES){
             PLL_PRELOAD -= 1;
         } else if(PLL_LAST_PULSES > PLL_DESIRED_PULSES) {
             PLL_PRELOAD += 1;
-        }
+        }/* else {
+            if(PLL_RESIDUAL > PLL_DESIRED_PULSES){
+                //PLL_PRELOAD -= 1;
+            }
+        }*/
         
         INTCON3bits.INT3IF = 0;
         pll_reset = 1;
@@ -81,4 +91,8 @@ char gpsclock_interrupt(void){
 
 uint16_t gpsclock_pll_freq(void){
     return PLL_LAST_PULSES;
+}
+
+uint16_t gpsclock_pll_residual(void){
+    return PLL_RESIDUAL & 0xFFFF;
 }

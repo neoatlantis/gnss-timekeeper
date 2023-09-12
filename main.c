@@ -8,16 +8,31 @@
 
 #include "config_bits.h"
 #include <xc.h>
+#include <string.h>
 
 #include "common.h"
 
-
 #include "display.h"
 #include "gpsclock.h"
+#include "gpsread.h"
 #include "isr.h"
 
 
 void main(void) {
+    
+    OSCTUNEbits.PLLEN = 1;
+    __delay_ms(1000);
+    
+    display_init();
+    gpsread_init();
+    
+    display_set_line(0, "NeoAtlantis GPSClock");
+    display_set_line(1, "Status: starting... ");
+    display_set_line(2, "                    ");
+    display_set_line(3, "                    ");
+    
+
+    
     
     
     TRISDbits.TRISD4 = 0;
@@ -29,14 +44,22 @@ void main(void) {
     
     // enable high priority interrupts
     INTCONbits.GIEH = 1;
+    INTCONbits.GIEL = 1;
     
-    display_init();
-    __delay_ms(100);
-    
-    display_set_line(0, "hello world                 x ");
+    display_set_line(3, "                    ");;
     
     while(1){
-        display_sprintf(1, "t= %x", gpsclock_pll_freq());
+        if(gpsread_has_new_message()){
+            gpsread_mark_as_read();
+            
+            if(0 == strncmp(gpsread_message, "$GNGGA", 6)){
+                char substr[20];
+                strncpy(substr, gpsread_message, 20);
+                display_set_line(3, substr);
+            }
+        }
+        
+        display_sprintf(2, "t= %x r=%x", gpsclock_pll_freq(), gpsclock_pll_residual());
         display_refresh();
         __delay_ms(20);
     }

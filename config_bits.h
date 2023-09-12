@@ -1,14 +1,20 @@
+
+// PIC18F87J50 Configuration Bit Settings
+
+// 'C' source line config statements
+
+// CONFIG1L
 #pragma config WDTEN = ON       // Watchdog Timer Enable bit (WDT enabled)
-#pragma config PLLDIV = 1       // PLL Prescaler Selection bits (No prescale (4 MHz oscillator input drives PLL directly))
+#pragma config PLLDIV = 2       // PLL Prescaler Selection bits (Divide by 2 (8 MHz oscillator input))
 #pragma config STVREN = ON      // Stack Overflow/Underflow Reset Enable bit (Reset on stack overflow/underflow enabled)
-#pragma config XINST = OFF       // Extended Instruction Set Enable bit (Instruction set extension and Indexed Addressing mode enabled)
+#pragma config XINST = OFF      // Extended Instruction Set Enable bit (Instruction set extension and Indexed Addressing mode disabled (Legacy mode))
 
 // CONFIG1H
 #pragma config CPUDIV = OSC1    // CPU System Clock Postscaler (No CPU system clock divide)
 #pragma config CP0 = OFF        // Code Protection bit (Program memory is not code-protected)
 
 // CONFIG2L
-#pragma config FOSC = HS        // Oscillator Selection bits (HS oscillator, HS used by USB)
+#pragma config FOSC = HSPLL     // Oscillator Selection bits (HS oscillator, PLL enabled, HSPLL used by USB)
 #pragma config FCMEN = ON       // Fail-Safe Clock Monitor Enable bit (Fail-Safe Clock Monitor enabled)
 #pragma config IESO = ON        // Two-Speed Start-up (Internal/External Oscillator Switchover) Control bit (Two-Speed Start-up enabled)
 
@@ -24,7 +30,7 @@
 // CONFIG3H
 #pragma config CCP2MX = DEFAULT // ECCP2 MUX bit (ECCP2/P2A is multiplexed with RC1)
 #pragma config ECCPMX = DEFAULT // ECCPx MUX bit (ECCP1 outputs (P1B/P1C) are multiplexed with RE6 and RE5; ECCP3 outputs (P3B/P3C) are multiplexed with RE4 and RE3)
-#pragma config PMPMX = 0        // PMP Pin Multiplex bit (PMP pins placed on EMB)
+#pragma config PMPMX = DEFAULT  // PMP Pin Multiplex bit (PMP pins placed on EMB)
 #pragma config MSSPMSK = MSK7   // MSSP Address Masking Mode Select bit (7-Bit Address Masking mode enable)
 
 // #pragma config statements should precede project file includes.
