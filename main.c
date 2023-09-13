@@ -49,6 +49,8 @@ void main(void) {
     display_set_line(3, "                    ");;
     
     while(1){
+        CLRWDT();
+        
         if(gpsread_has_new_message()){
             gpsread_mark_as_read();
             
@@ -59,7 +61,7 @@ void main(void) {
             }
         }
         
-        display_sprintf(2, "t= %x r=%x", gpsclock_pll_freq(), gpsclock_pll_residual());
+        display_sprintf(2, "t= %x p=%x", gpsclock_pll_freq(), PLL_PRELOAD);
         display_refresh();
         __delay_ms(20);
     }
