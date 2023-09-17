@@ -13,12 +13,17 @@
 #include "common.h"
 
 #include "display.h"
+#include "ui.h"
 #include "gpsclock.h"
 #include "gpsread.h"
 #include "isr.h"
 
 
+#define read2digits(str, i) ((str[i]-'0')*10+(str[i+1]-'0'))
+
 void main(void) {
+    
+    char ui_redraw_counter = 0;
     
     OSCTUNEbits.PLLEN = 1;
     __delay_ms(1000);
@@ -26,10 +31,7 @@ void main(void) {
     display_init();
     gpsread_init();
     
-    display_set_line(0, "NeoAtlantis GPSClock");
-    display_set_line(1, "Status: starting... ");
-    display_set_line(2, "                    ");
-    display_set_line(3, "                    ");
+    ui_init();
     
 
     
@@ -46,23 +48,29 @@ void main(void) {
     INTCONbits.GIEH = 1;
     INTCONbits.GIEL = 1;
     
-    display_set_line(3, "                    ");;
     
     while(1){
         CLRWDT();
         
-        if(gpsread_has_new_message()){
+        if(gpsread_has_new_message() && !gpsclock_override_on_next_1pps){
             gpsread_mark_as_read();
             
             if(0 == strncmp(gpsread_message, "$GNGGA", 6)){
-                char substr[20];
-                strncpy(substr, gpsread_message, 20);
-                display_set_line(3, substr);
+                SYSTEM_CLOCK_NEXT_OVERRIDE.microsecond = 0;
+                SYSTEM_CLOCK_NEXT_OVERRIDE.second = read2digits(gpsread_message, 11);
+                SYSTEM_CLOCK_NEXT_OVERRIDE.minute = read2digits(gpsread_message, 9);
+                SYSTEM_CLOCK_NEXT_OVERRIDE.hour = read2digits(gpsread_message, 7);
+                
+                gpsclock_override_on_next_1pps = 1;
             }
         }
         
-        display_sprintf(2, "t= %x p=%x", gpsclock_pll_freq(), PLL_PRELOAD);
-        display_refresh();
-        __delay_ms(20);
+        ui_refresh();
+        
+        if(ui_redraw_counter++ > 10){
+            ui_redraw();
+            ui_redraw_counter = 0;
+        }
+        
     }
 }
