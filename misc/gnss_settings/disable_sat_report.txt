@@ -1,0 +1,23 @@
+# Config changes format version 1.0
+# created by u-center version 23.08 at 12:58:25 on Sunday, 17 Sep 2023
+[del]
+[set]
+Flash CFG-NMEA-FILT_NAVIC  1                    # write value 1                    to item id 0x10930018 in layer 2
+  RAM CFG-NMEA-FILT_GPS    1                    # write value 1                    to item id 0x10930011 in layer 0
+  BBR CFG-NMEA-FILT_GPS    1                    # write value 1                    to item id 0x10930011 in layer 1
+Flash CFG-NMEA-FILT_GPS    1                    # write value 1                    to item id 0x10930011 in layer 2
+  RAM CFG-NMEA-FILT_SBAS   1                    # write value 1                    to item id 0x10930012 in layer 0
+  BBR CFG-NMEA-FILT_SBAS   1                    # write value 1                    to item id 0x10930012 in layer 1
+Flash CFG-NMEA-FILT_SBAS   1                    # write value 1                    to item id 0x10930012 in layer 2
+  RAM CFG-NMEA-FILT_GAL    1                    # write value 1                    to item id 0x10930013 in layer 0
+  BBR CFG-NMEA-FILT_GAL    1                    # write value 1                    to item id 0x10930013 in layer 1
+Flash CFG-NMEA-FILT_GAL    1                    # write value 1                    to item id 0x10930013 in layer 2
+  RAM CFG-NMEA-FILT_QZSS   1                    # write value 1                    to item id 0x10930015 in layer 0
+  BBR CFG-NMEA-FILT_QZSS   1                    # write value 1                    to item id 0x10930015 in layer 1
+Flash CFG-NMEA-FILT_QZSS   1                    # write value 1                    to item id 0x10930015 in layer 2
+  RAM CFG-NMEA-FILT_GLO    1                    # write value 1                    to item id 0x10930016 in layer 0
+  BBR CFG-NMEA-FILT_GLO    1                    # write value 1                    to item id 0x10930016 in layer 1
+Flash CFG-NMEA-FILT_GLO    1                    # write value 1                    to item id 0x10930016 in layer 2
+  RAM CFG-NMEA-FILT_BDS    1                    # write value 1                    to item id 0x10930017 in layer 0
+  BBR CFG-NMEA-FILT_BDS    1                    # write value 1                    to item id 0x10930017 in layer 1
+Flash CFG-NMEA-FILT_BDS    1                    # write value 1                    to item id 0x10930017 in layer 2

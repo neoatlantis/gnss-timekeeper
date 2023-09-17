@@ -75,6 +75,8 @@ void gpsclock_init(void){
     
 }
 
+#define override(name) if(SYSTEM_CLOCK_NEXT_OVERRIDE.name >= 0) SYSTEM_CLOCK.name = SYSTEM_CLOCK_NEXT_OVERRIDE.name;
+
 char gpsclock_interrupt(void){
     
     char gpsclock_adjusted_by_pps = 0;
@@ -109,13 +111,13 @@ char gpsclock_interrupt(void){
         
         if(gpsclock_override_on_next_1pps){
             gpsclock_override_on_next_1pps = 0;
-            SYSTEM_CLOCK.microsecond = SYSTEM_CLOCK_NEXT_OVERRIDE.microsecond;
-            SYSTEM_CLOCK.second = SYSTEM_CLOCK_NEXT_OVERRIDE.second;
-            SYSTEM_CLOCK.minute = SYSTEM_CLOCK_NEXT_OVERRIDE.minute;
-            SYSTEM_CLOCK.hour = SYSTEM_CLOCK_NEXT_OVERRIDE.hour;
-            SYSTEM_CLOCK.day = SYSTEM_CLOCK_NEXT_OVERRIDE.day;
-            SYSTEM_CLOCK.month = SYSTEM_CLOCK_NEXT_OVERRIDE.month;
-            SYSTEM_CLOCK.year = SYSTEM_CLOCK_NEXT_OVERRIDE.year;
+            override(microsecond);
+            override(second);
+            override(minute);
+            override(hour);
+            override(day);
+            override(month);
+            override(year);
         }
         
         gpsclock_untracked_ms = 0;

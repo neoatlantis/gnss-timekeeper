@@ -7,13 +7,13 @@ struct gpsclock_status_t {
 };
 
 struct system_clock_t {
-    uint32_t microsecond;
-    uint8_t  second;
-    uint8_t  minute;
-    uint8_t  hour;
-    uint8_t  day;
-    uint8_t  month;
-    uint16_t year;
+    int32_t microsecond;
+    int8_t  second;
+    int8_t  minute;
+    int8_t  hour;
+    int8_t  day;
+    int8_t  month;
+    int16_t year;
 };
 struct system_clock_t SYSTEM_CLOCK = {0,0,0,0,1,1,1970};
 struct system_clock_t SYSTEM_CLOCK_NEXT_OVERRIDE;

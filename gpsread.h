@@ -35,8 +35,8 @@
 
 void gpsread_init();
 void gpsread_interrupt();
-char gpsread_has_new_message();
-void gpsread_mark_as_read();
+void gpsread_process_new_message();
+void gpsread_process_ubx();
 
 char gpsread_message[255];
 

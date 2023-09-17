@@ -52,7 +52,7 @@ void main(void) {
     while(1){
         CLRWDT();
         
-        if(gpsread_has_new_message() && !gpsclock_override_on_next_1pps){
+/*        if(gpsread_has_new_message() && !gpsclock_override_on_next_1pps){
             gpsread_mark_as_read();
             
             if(0 == strncmp(gpsread_message, "$GNGGA", 6)){
@@ -63,7 +63,8 @@ void main(void) {
                 
                 gpsclock_override_on_next_1pps = 1;
             }
-        }
+        }*/
+        gpsread_process_new_message();
         
         ui_refresh();
         
